@@ -1,0 +1,79 @@
+package codigoSQL;
+
+import java_cup.runtime.Symbol;
+
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal  Add, After, Any, Arraylen, Array, Cluster, Colum, Contains, Convert, Day,  Default, Object, Full, Name, Nchar, Next, New, 
+Numeric, Primary, Result, Table, Schema, View, Comillas, Punto, Type, Index, Declare, By, Binary, Integer,  End, Begin, Where,
+First, Last, Exists, Count, Prior,  Trim, Delete, If, Else, Elsif, Then, Goto, Loop, While, Exit, Select, When, Others, Update,
+From, Dual, Into, Open, Close, Trigger, Create, Alter, As, For, Each, Row, Before, Function, Return, Asc, Desc, Order,
+Commit, Rollback, Savepoint, Values,   Op_Igual, Op_Suma, Op_Resta, Op_Multiplicacion, Op_Division, Op_Logico, Op_Relacional,
+Op_Atribucion, Op_Incremento, Op_Booleano, Parentesis_Izq, Parentesis_Der, Llave_Izq, Llave_Der, Corchete_Izq, Corchete_Der,
+P_Coma, Dos_Puntos, Identificador, Numero, Real, Texto, ERROR;
+
+terminal String  Number, Char, Varchar2, Boolean, Date, Insert;
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE, WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, SWITCH;
+non terminal String SUMA, RESTA, MULTIPLICACION, DIVISION, RAIZ, POTENCIA;
+
+start with INICIO;
+
+INICIO ::= 
+    Create Table Identificador Parentesis_Izq SENTENCIA Parentesis_Der |
+    Select From Identificador P_Coma |
+     Select From Identificador P_Coma Where Identificador Op_Igual Comillas Identificador Comillas P_Coma |
+     Select From Identificador P_Coma Where Identificador Op_Igual Comillas Numero Comillas P_Coma
+;
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA IF | 
+    IF |
+    SENTENCIA IF_ELSE |
+    IF_ELSE |
+    SENTENCIA WHILE|
+    WHILE |
+    SENTENCIA FOR |
+    FOR |
+    MULTIPLICACION|
+    DIVISION |
+    SUMA |
+    RESTA
+;
+DECLARACION ::= 
+  Integer Identificador P_Coma | 
+    Integer Identificador Op_Atribucion Numero P_Coma |
+    Integer Identificador Op_Igual Numero P_Coma |
+    Integer Identificador Op_Incremento P_Coma | 
+    Integer Op_Incremento Identificador P_Coma 
+
+
+;
+IF ::= If Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der
+;
+SENTENCIA_BOOLEANA ::= 
+    Op_Booleano | 
+    Identificador Op_Relacional Op_Booleano |
+    Identificador Op_Relacional Numero |
+    Identificador Op_Relacional Identificador |
+    Identificador Op_Relacional Comillas Comillas |
+    Identificador Op_Relacional Comillas Identificador Comillas
+;
+IF_ELSE ::= If Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der Else Llave_Izq SENTENCIA Llave_Der
+;
+WHILE ::= While Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der
+
+;
+}

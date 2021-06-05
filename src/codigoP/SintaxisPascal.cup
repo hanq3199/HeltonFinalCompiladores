@@ -1,0 +1,130 @@
+package codigoPLSQL;
+
+import java_cup.runtime.Symbol;
+
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal  Comillas, Write, ReadLn, Adsolute, Asm, Circle, Destructor,  Downto, Punto,  External, Forward, If, Inline, Label, Or,  Not, Procedure,
+Record, Set, String, Type, Uses,  While, And, Begin, Const, Div, Else, File, Function,  Implemetation, Interface, Mod, Object,
+Packed, Program, Rectangle, Shl, Then, Unit , Var,  With, Array, Case, Constructor,  Do, End, For, Goto, In, Interrupt,  Nil , Of,
+Private, Random , Repeat,  Shr, To,  Until, Virtual, Xor, Op_Igual, Op_Suma, Op_Resta, Op_Multiplicacion, Op_Division,
+ Op_Logico, Op_Relacional, Op_Atribucion, Op_Incremento, Op_Booleano, Parentesis_Izq, Parentesis_Der, Llave_Izq, Llave_Der, 
+Corchete_Izq, Corchete_Der, P_Coma, Dos_Puntos, Identificador, Numero, Real, Texto, ERROR;
+
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE, WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, SWITCH;
+non terminal String SUMA, RESTA, MULTIPLICACION, DIVISION;
+
+
+precedence left Op_Suma, Op_Resta;
+precedence left Op_Division, Op_Multiplicacion;
+
+
+start with INICIO;
+
+INICIO ::= 
+   Program  Identificador Parentesis_Izq Identificador P_Coma Identificador Parentesis_Der P_Coma Begin SENTENCIA 
+;
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA IF | 
+    IF |
+    SENTENCIA IF_ELSE |
+    IF_ELSE |
+    SENTENCIA WHILE|
+    WHILE |
+    SENTENCIA FOR |
+    FOR |
+    MULTIPLICACION|
+    DIVISION |
+    SUMA |
+    RESTA |
+
+    SWITCH
+;
+DECLARACION ::= 
+  Var Identificador P_Coma | 
+    Var Identificador Op_Atribucion Numero P_Coma |
+    Var Identificador Op_Igual Numero P_Coma |
+    Var Identificador Op_Incremento P_Coma | 
+    Var Op_Incremento Identificador P_Coma | 
+    
+    Var Identificador Op_Atribucion Comillas Comillas P_Coma |
+    Var Identificador Op_Igual Comillas Comillas P_Coma |
+    Var  Identificador Op_Atribucion Comillas Identificador Comillas P_Coma |
+    Var Identificador Op_Igual Comillas Identificador Comillas P_Coma |
+    Write Parentesis_Izq Comillas Identificador Comillas Parentesis_Der P_Coma|
+    ReadLn Parentesis_Izq Identificador Parentesis_Der P_Coma   
+
+
+;
+IF ::= If Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der
+;
+SENTENCIA_BOOLEANA ::= 
+    Op_Booleano | 
+    Identificador Op_Relacional Op_Booleano |
+    Identificador Op_Relacional Numero |
+    Identificador Op_Relacional Identificador |
+    Identificador Op_Relacional Comillas Comillas |
+    Identificador Op_Relacional Comillas Identificador Comillas
+;
+IF_ELSE ::= If Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der Else Llave_Izq SENTENCIA Llave_Der
+;
+WHILE ::= While Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der
+;
+FOR::= For Parentesis_Izq SENTENCIA_FOR Parentesis_Der Llave_Izq SENTENCIA Llave_Der
+;
+SENTENCIA_FOR ::=
+    Var Identificador Op_Igual Numero P_Coma SENTENCIA_BOOLEANA P_Coma DECLARACION_FOR |
+    Identificador Op_Igual Numero P_Coma SENTENCIA_BOOLEANA P_Coma DECLARACION_FOR
+;
+DECLARACION_FOR ::= 
+    Identificador Op_Atribucion Numero |
+    Identificador Op_Incremento | 
+    Op_Incremento Identificador
+;
+SUMA::= SUMA:a Op_Suma SUMA:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1-num2;
+    RESULT= (respuesta)+"";
+:}
+;
+
+RESTA::= RESTA:a Op_Resta RESTA:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1-num2;
+    RESULT= (respuesta)+"";
+    :}
+
+;
+DIVISION::= DIVISION:a Op_Division DIVISION:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1/num2;
+    RESULT= (respuesta)+"";
+    :}
+
+;
+MULTIPLICACION::= MULTIPLICACION:a Op_Multiplicacion MULTIPLICACION:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1*num2;
+    RESULT= (respuesta)+"";
+    :}
+
+
+;

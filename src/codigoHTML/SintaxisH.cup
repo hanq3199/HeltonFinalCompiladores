@@ -1,0 +1,39 @@
+package codigoHTML;
+
+import java_cup.runtime.Symbol;
+
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal  Comillas, Address, Appelt, Area, Basefont, Big, Punto, Blockquote, Body, Br, B, Caption, Center, Cite, Code, Dd,
+Dfn, Dir, Div, Dl, Em,  Font, Form, H1, H2, H3, H4, H5, H6, Head, Hr,  Html, Img, Input, Sindex,  I,  Kbd,  Link, Li, Map,
+Menu, Meta, Ol, Option,  Param, Pre,  P, Samp, Script, Select, Small, Strike, Strong, Stype, Sub, Sup, Table, Td, Textarea, Th, Title,
+Tr, Tt, UL,  U, Var, Noscript,  Base,  Time, Data, Op_Igual, Op_Suma, Op_Resta, Op_Multiplicacion, Op_Division, Op_Logico, Op_Relacional,
+Op_Atribucion, Op_Incremento, Op_Booleano, Parentesis_Izq, Parentesis_Der, Llave_Izq, Llave_Der, Corchete_Izq, Corchete_Der,
+P_Coma, Dos_Puntos, Identificador, Numero, Real, Texto, sup, Isindex, Ul, Slect, Basefront, ERROR;
+
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE, WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, SWITCH;
+non terminal String SUMA, RESTA, MULTIPLICACION, DIVISION, RAIZ, POTENCIA;
+
+start with INICIO;
+
+INICIO ::= 
+Op_Relacional Html Op_Relacional |
+Op_Relacional Head Op_Relacional |
+Op_Relacional Title Op_Relacional |
+Op_Relacional Body Op_Relacional |
+Op_Relacional P Op_Relacional |
+Identificador |
+Identificador Op_Relacional Identificador Op_Relacional Identificador Op_Relacional Identificador Op_Relacional 
+;

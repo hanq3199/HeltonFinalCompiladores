@@ -1,0 +1,109 @@
+package codigoPLSQL;
+
+import java_cup.runtime.Symbol;
+
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal  Comillas, Punto, Type, Index, Declare, By, Binary, Integer, Table, End, Begin, 
+First, Last, Exists, Count, Prior, Next, Trim, Delete, If, Else, Elsif, Then, Goto, Loop, While, Exit, Select, When, Others, Update,
+From, Dual, Into, Open, Close, Trigger, Create, Alter, As, For, Each, Row, Before, Function, Return, Asc, Desc, Order,
+Commit, Rollback, Savepoint, Values,   Op_Igual, Op_Suma, Op_Resta, Op_Multiplicacion, Op_Division, Op_Logico, Op_Relacional,
+Op_Atribucion, Op_Incremento, Op_Booleano, Parentesis_Izq, Parentesis_Der, Llave_Izq, Llave_Der, Corchete_Izq, Corchete_Der,
+P_Coma, Dos_Puntos, Identificador, Numero, Real, Texto, ERROR;
+
+terminal String  Number, Char, Varchar2, Boolean, Date, Insert;
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE, WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, SWITCH;
+non terminal String SUMA, RESTA, MULTIPLICACION, DIVISION;
+
+start with INICIO;
+
+INICIO ::= 
+    Create
+;
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA IF | 
+    IF |
+    SENTENCIA IF_ELSE |
+    IF_ELSE |
+    SENTENCIA WHILE|
+    WHILE |
+    SENTENCIA FOR |
+    FOR |
+    MULTIPLICACION|
+    DIVISION |
+    SUMA |
+    RESTA |
+   
+    SWITCH
+;
+DECLARACION ::= 
+  Integer Identificador P_Coma | 
+    Integer Identificador Op_Atribucion Numero P_Coma |
+    Integer Identificador Op_Igual Numero P_Coma |
+    Integer Identificador Op_Incremento P_Coma | 
+    Integer Op_Incremento Identificador P_Coma 
+
+
+;
+IF ::= If Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der
+;
+SENTENCIA_BOOLEANA ::= 
+    Op_Booleano | 
+    Identificador Op_Relacional Op_Booleano |
+    Identificador Op_Relacional Numero |
+    Identificador Op_Relacional Identificador |
+    Identificador Op_Relacional Comillas Comillas |
+    Identificador Op_Relacional Comillas Identificador Comillas
+;
+IF_ELSE ::= If Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der Else Llave_Izq SENTENCIA Llave_Der
+;
+WHILE ::= While Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der
+
+;
+SUMA::= SUMA:a Op_Suma SUMA:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1-num2;
+    RESULT= (respuesta)+"";
+:}
+;
+
+RESTA::= RESTA:a Op_Resta RESTA:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1-num2;
+    RESULT= (respuesta)+"";
+    :}
+
+;
+DIVISION::= DIVISION:a Op_Division DIVISION:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1/num2;
+    RESULT= (respuesta)+"";
+    :}
+
+;
+MULTIPLICACION::= MULTIPLICACION:a Op_Multiplicacion MULTIPLICACION:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1*num2;
+    RESULT= (respuesta)+"";
+    :}
+;
+
+

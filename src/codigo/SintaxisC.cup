@@ -1,0 +1,176 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+
+
+parser code
+{:
+    private Symbol s;
+    
+    public void syntax_error(Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+}
+:};
+
+terminal  Comillas, Main, Void, Cin, Cout,If, Else, Getch, Goto, Menu, Const, Case, Break, Do, While, 
+For, Delete, Private, Public, Static, Struct, Switch, Parentesis_Izq, Parentesis_Der, Llave_Izq, Llave_Der, Corchete_Izq, Texto,
+Corchete_Der, P_Coma, Op_Division, Op_Multiplicacion, Op_Suma, Continue, Op_Igual, Op_Resta, Raiz, Potencia,Identificador, Op_Logico, Op_Relacional, Op_Atribucion, 
+Op_Incremento, Op_Booleano, Numero, Real, Class, Dos_Puntos, ERROR;
+terminal String Int, String, Float, Bool, Char, Short, Long, Double ;
+non terminal INICIO, SENTENCIA, DECLARACION, DECLARACION_FOR, IF, IF_ELSE, WHILE, FOR, SENTENCIA_BOOLEANA, SENTENCIA_FOR, SWITCH;
+non terminal String SUMA, RESTA, MULTIPLICACION, DIVISION, RAIZ, POTENCIA;
+
+precedence left Op_Suma, Op_Resta;
+precedence left Op_Division, Op_Multiplicacion;
+precedence left Raiz, Potencia;
+
+start with INICIO;
+
+INICIO ::= 
+    Int  Main Parentesis_Izq Parentesis_Der Llave_Izq SENTENCIA Llave_Der  |
+   Main Parentesis_Izq Parentesis_Der Llave_Izq SENTENCIA Llave_Der 
+;
+SENTENCIA ::= 
+    SENTENCIA DECLARACION |
+    DECLARACION |
+    SENTENCIA IF | 
+    IF |
+    SENTENCIA IF_ELSE |
+    IF_ELSE |
+    SENTENCIA WHILE|
+    WHILE |
+    SENTENCIA FOR |
+    FOR |
+    MULTIPLICACION|
+    DIVISION |
+    SUMA |
+    RESTA |
+    RAIZ |
+    POTENCIA |
+    SWITCH
+;
+DECLARACION ::= 
+  Int Identificador P_Coma | 
+    Int Identificador Op_Atribucion Numero P_Coma |
+    Int Identificador Op_Igual Numero P_Coma |
+    Int Identificador Op_Incremento P_Coma | 
+    Int Op_Incremento Identificador P_Coma | 
+    Float Identificador P_Coma | 
+    Float Identificador Op_Atribucion Real P_Coma |  
+    Float Identificador Op_Igual Real P_Coma |
+    Float Identificador Op_Incremento P_Coma | 
+    Float Op_Incremento Identificador P_Coma |  
+    String Identificador Op_Atribucion Comillas Comillas P_Coma |
+    String Identificador Op_Igual Comillas Comillas P_Coma |
+    String Identificador Op_Atribucion Comillas Identificador Comillas P_Coma |
+    String Identificador Op_Igual Comillas Identificador Comillas P_Coma |
+    Char Identificador Op_Atribucion Comillas Comillas P_Coma |
+    Char Identificador Op_Igual Comillas Comillas P_Coma |
+    Char Identificador Op_Atribucion Comillas Identificador Comillas P_Coma |
+    Char Identificador Op_Igual Comillas Identificador Comillas P_Coma |
+    Cout Op_Relacional  Comillas Identificador Comillas P_Coma  |
+    Cout Op_Relacional   Comillas Identificador Comillas P_Coma Op_Suma Identificador P_Coma |
+    Cin Op_Relacional Identificador P_Coma |
+    Int Identificador P_Coma Llave_Izq SENTENCIA Llave_Der | 
+    Int Identificador Op_Atribucion Numero P_Coma P_Coma Llave_Izq SENTENCIA Llave_Der  |
+    Int Identificador Op_Igual Numero P_Coma  Llave_Izq SENTENCIA Llave_Der  |
+    Int Identificador Op_Incremento P_Coma Llave_Izq SENTENCIA Llave_Der | 
+    Int Op_Incremento Identificador P_Coma Llave_Izq SENTENCIA Llave_Der  | 
+    Float Identificador P_Coma Llave_Izq SENTENCIA Llave_Der  | 
+    Float Identificador Op_Atribucion Real P_Coma Llave_Izq SENTENCIA Llave_Der  |  
+    Float Identificador Op_Igual Real P_Coma Llave_Izq SENTENCIA Llave_Der  |
+    Float Identificador Op_Incremento P_Coma Llave_Izq SENTENCIA Llave_Der | 
+    Float Op_Incremento Identificador P_Coma Llave_Izq SENTENCIA Llave_Der  |  
+    String Identificador Op_Atribucion Comillas Comillas P_Coma Llave_Izq SENTENCIA Llave_Der  |
+    String Identificador Op_Igual Comillas Comillas P_Coma Llave_Izq SENTENCIA Llave_Der |
+    String Identificador Op_Atribucion Comillas Identificador Comillas P_Coma Llave_Izq SENTENCIA Llave_Der |
+    String Identificador Op_Igual Comillas Identificador Comillas P_Coma Llave_Izq SENTENCIA Llave_Der  |
+    Char Identificador Op_Atribucion Comillas Comillas P_Coma Llave_Izq SENTENCIA Llave_Der |
+    Char Identificador Op_Igual Comillas Comillas P_Coma Llave_Izq SENTENCIA Llave_Der |
+    Char Identificador Op_Atribucion Comillas Identificador Comillas P_Coma Llave_Izq SENTENCIA Llave_Der  |
+    Char Identificador Op_Igual Comillas Identificador Comillas P_Coma Llave_Izq SENTENCIA Llave_Der  |
+    Cout Op_Relacional Comillas Identificador Comillas  P_Coma  Llave_Izq SENTENCIA Llave_Der  |
+    Cout Op_Relacional Comillas Texto Identificador P_Coma Op_Suma Identificador  P_Coma Llave_Izq SENTENCIA Llave_Der  |
+    Cin Op_Relacional Identificador P_Coma Llave_Izq SENTENCIA Llave_Der
+
+
+;
+IF ::= If Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der
+;
+SENTENCIA_BOOLEANA ::= 
+    Op_Booleano | 
+    Identificador Op_Relacional Op_Booleano |
+    Identificador Op_Relacional Numero |
+    Identificador Op_Relacional Identificador |
+    Identificador Op_Relacional Comillas Comillas |
+    Identificador Op_Relacional Comillas Identificador Comillas
+;
+IF_ELSE ::= If Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der Else Llave_Izq SENTENCIA Llave_Der
+;
+WHILE ::= While Parentesis_Izq SENTENCIA_BOOLEANA Parentesis_Der Llave_Izq SENTENCIA Llave_Der
+;
+FOR::= For Parentesis_Izq SENTENCIA_FOR Parentesis_Der Llave_Izq SENTENCIA Llave_Der
+;
+SENTENCIA_FOR ::=
+    Int Identificador Op_Igual Numero P_Coma SENTENCIA_BOOLEANA P_Coma DECLARACION_FOR |
+    Identificador Op_Igual Numero P_Coma SENTENCIA_BOOLEANA P_Coma DECLARACION_FOR
+;
+DECLARACION_FOR ::= 
+    Identificador Op_Atribucion Numero |
+    Identificador Op_Incremento | 
+    Op_Incremento Identificador
+;
+SUMA::= SUMA:a Op_Suma SUMA:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1-num2;
+    RESULT= (respuesta)+"";
+:}
+;
+
+RESTA::= RESTA:a Op_Resta RESTA:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1-num2;
+    RESULT= (respuesta)+"";
+    :}
+
+;
+DIVISION::= DIVISION:a Op_Division DIVISION:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1/num2;
+    RESULT= (respuesta)+"";
+    :}
+
+;
+MULTIPLICACION::= MULTIPLICACION:a Op_Multiplicacion MULTIPLICACION:b {: 
+    int num1 = Integer.parseInt(a);
+    int num2= Integer.parseInt(b);
+    int respuesta = num1*num2;
+    RESULT= (respuesta)+"";
+    :}
+;
+
+
+RAIZ ::= 
+
+Raiz Parentesis_Izq RAIZ:num Parentesis_Der {: RESULT=num;:}
+;
+
+POTENCIA ::= 
+Potencia Parentesis_Izq POTENCIA:num1 P_Coma POTENCIA:num2 Parentesis_Der
+| Parentesis_Izq POTENCIA:num Parentesis_Der {: RESULT=num;:}
+| Int:num {:RESULT=num;:}
+| Float:de {:RESULT=de;:}
+| Identificador
+
+
+;
+SWITCH ::=
+Switch Parentesis_Izq Identificador Parentesis_Der Llave_Izq Case Identificador P_Coma SENTENCIA Break P_Coma Llave_Der 
+;
